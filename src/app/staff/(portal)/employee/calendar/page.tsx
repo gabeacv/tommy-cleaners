@@ -1,6 +1,5 @@
 "use client";
 
-import StaffLayout from "@/components/StaffLayout";
 import { Clock, MapPin, Phone, User } from "lucide-react";
 import { useState } from "react";
 
@@ -29,43 +28,41 @@ export default function EmployeeCalendar() {
   const [selectedAppt, setSelectedAppt] = useState<typeof mockAppointments[0] | null>(null);
 
   return (
-    <StaffLayout>
-      <div className="flex flex-col gap-12">
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          <div>
-            <h1 className="text-4xl font-cursive text-charcoal mb-2">My Service Schedule</h1>
-            <p className="text-charcoal/40 text-sm italic">Restore peace of mind to your assigned clients.</p>
-          </div>
-          <div className="bg-primary/20 px-8 py-4 rounded-full text-primary font-cursive text-lg">Today, April 12th</div>
-        </header>
-
-        <div className="flex flex-col gap-6">
-            {mockAppointments.map((appt) => (
-                <div 
-                    key={appt.id} 
-                    onClick={() => setSelectedAppt(appt)} 
-                    className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-xl border border-charcoal/5 flex flex-col md:flex-row items-center justify-between gap-8 group cursor-pointer hover:shadow-2xl hover:scale-[1.01] transition-all duration-500"
-                >
-                    <div className="flex items-center gap-8 w-full md:w-auto">
-                        <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center text-primary font-cursive text-3xl group-hover:bg-primary group-hover:text-charcoal transition-colors duration-500 shrink-0">{appt.client[0]}</div>
-                        <div className="flex flex-col gap-1">
-                            <h3 className="text-2xl font-cursive text-charcoal">{appt.client}</h3>
-                            <div className="flex items-center gap-3 text-charcoal/40 text-xs tracking-widest uppercase mt-2">
-                                <Clock size={16} />
-                                <span>{appt.time}</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-4 w-full md:w-auto justify-end">
-                        <p className="text-sm italic font-light text-charcoal/60 hidden md:block">Click for details</p>
-                        <button className="bg-cloud text-charcoal/40 p-4 rounded-full group-hover:text-primary transition-colors hover:bg-primary/20">
-                             <User size={24} />
-                        </button>
-                    </div>
-                </div>
-            ))}
+    <div className="flex flex-col gap-12">
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div>
+          <h1 className="text-4xl font-cursive text-charcoal mb-2">My Service Schedule</h1>
+          <p className="text-charcoal/40 text-sm italic">Restore peace of mind to your assigned clients.</p>
         </div>
+        <div className="bg-primary/20 px-8 py-4 rounded-full text-primary font-cursive text-lg">Today, April 12th</div>
+      </header>
+
+      <div className="flex flex-col gap-6">
+          {mockAppointments.map((appt) => (
+              <div 
+                  key={appt.id} 
+                  onClick={() => setSelectedAppt(appt)} 
+                  className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-xl border border-charcoal/5 flex flex-col md:flex-row items-center justify-between gap-8 group cursor-pointer hover:shadow-2xl hover:scale-[1.01] transition-all duration-500"
+              >
+                  <div className="flex items-center gap-8 w-full md:w-auto">
+                      <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center text-primary font-cursive text-3xl group-hover:bg-primary group-hover:text-charcoal transition-colors duration-500 shrink-0">{appt.client[0]}</div>
+                      <div className="flex flex-col gap-1">
+                          <h3 className="text-2xl font-cursive text-charcoal">{appt.client}</h3>
+                          <div className="flex items-center gap-3 text-charcoal/40 text-xs tracking-widest uppercase mt-2">
+                              <Clock size={16} />
+                              <span>{appt.time}</span>
+                          </div>
+                      </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-4 w-full md:w-auto justify-end">
+                      <p className="text-sm italic font-light text-charcoal/60 hidden md:block">Click for details</p>
+                      <button className="bg-cloud text-charcoal/40 p-4 rounded-full group-hover:text-primary transition-colors hover:bg-primary/20">
+                           <User size={24} />
+                      </button>
+                  </div>
+              </div>
+          ))}
       </div>
 
       {/* Appointment Detail Modal */}
@@ -123,6 +120,6 @@ export default function EmployeeCalendar() {
              </div>
         </div>
       )}
-    </StaffLayout>
+    </div>
   );
 }

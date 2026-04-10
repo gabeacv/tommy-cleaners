@@ -37,11 +37,6 @@ export async function proxy(request: NextRequest) {
             value,
             ...options,
           });
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          });
           response.cookies.set({
             name,
             value,
@@ -54,11 +49,6 @@ export async function proxy(request: NextRequest) {
             value: "",
             ...options,
           });
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          });
           response.cookies.set({
             name,
             value: "",
@@ -69,6 +59,13 @@ export async function proxy(request: NextRequest) {
     }
   );
 
+  const syncCookies = (from: NextResponse, to: NextResponse) => {
+    from.cookies.getAll().forEach((cookie) => {
+      to.cookies.set(cookie.name, cookie.value, cookie);
+    });
+    return to;
+  };
+
   const { data: { user } } = await supabase.auth.getUser();
 
   // Protect staff routes
@@ -77,22 +74,31 @@ export async function proxy(request: NextRequest) {
     const isPublic = request.nextUrl.pathname === "/staff" || request.nextUrl.pathname === "/staff/reset-password";
     
     if (!user && !isPublic) {
-      return NextResponse.redirect(new URL("/staff", request.url));
+      return syncCookies(response, NextResponse.redirect(new URL("/staff", request.url)));
     }
 
-    if (user && isPublic) {
-        // Redirect based on role if already logged in
-        const { data: profile } = await supabase
-            .from("profiles")
-            .select("role")
-            .eq("id", user.id)
-            .maybeSingle();
+    if (user) {
+        let role = 'employee';
+        try {
+            const { data: profile } = await supabase
+                .from("profiles")
+                .select("role")
+                .eq("id", user.id)
+                .maybeSingle();
+            if (profile?.role) role = profile.role;
+        } catch (e) {
+            console.error("Middleware Role Check Error:", e);
+        }
 
-        if (profile?.role === 'admin') {
-            return NextResponse.redirect(new URL("/staff/admin/calendar", request.url));
-        } else {
-            // Default to employee if no profile found or role is employee
-            return NextResponse.redirect(new URL("/staff/employee/calendar", request.url));
+        // Redirect based on role if already on login page
+        if (isPublic) {
+            const dest = role === 'admin' ? "/staff/admin/calendar" : "/staff/employee/calendar";
+            return syncCookies(response, NextResponse.redirect(new URL(dest, request.url)));
+        }
+
+        // Authenticated + role !== 'admin' on any /staff/admin/* → redirect /staff/employee/calendar
+        if (request.nextUrl.pathname.startsWith("/staff/admin") && role !== 'admin') {
+            return syncCookies(response, NextResponse.redirect(new URL("/staff/employee/calendar", request.url)));
         }
     }
   }
