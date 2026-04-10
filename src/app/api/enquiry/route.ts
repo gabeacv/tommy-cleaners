@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createAdminClient } from "@/utils/supabase/admin";
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
@@ -6,18 +6,9 @@ const resendApiKey = process.env.RESEND_API_KEY;
 
 const resend = resendApiKey ? new Resend(resendApiKey) : null;
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseServiceRole = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-const supabaseAdmin = (supabaseUrl && supabaseServiceRole) 
-  ? createClient(supabaseUrl, supabaseServiceRole)
-  : null;
-
 export async function POST(req: Request) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json({ error: "Storage not configured." }, { status: 500 });
-    }
+    const supabaseAdmin = createAdminClient();
 
     const body = await req.json();
 
@@ -35,7 +26,7 @@ export async function POST(req: Request) {
           property_type, 
           area, 
           message,
-          status: 'pending' 
+          status: 'new' 
         },
       ]);
 
