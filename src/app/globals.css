@@ -1,26 +1,43 @@
 @import "tailwindcss";
 
+@theme {
+  --font-cursive: "Dancing Script", cursive;
+  --font-sans: "Inter", sans-serif;
+  
+  --color-primary: #BFD9F2;
+  --color-charcoal: #2C2C2C;
+  --color-cloud: #F4F8FC;
+  --color-white: #FFFFFF;
+}
+
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #2C2C2C;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    @apply bg-white text-charcoal font-sans;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-cursive;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+
+/* Base scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Layout utilities */
+.container-wide {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Cloud transition placeholder class */
+.cloud-dissolve {
+  mask-image: linear-gradient(to bottom, transparent, black 25%, black 75%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 25%, black 75%, transparent);
 }
