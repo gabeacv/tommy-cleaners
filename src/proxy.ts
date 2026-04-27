@@ -32,27 +32,37 @@ export async function proxy(request: NextRequest) {
           return request.cookies.get(name)?.value;
         },
         set(name: string, value: string, options: CookieOptions) {
+          const cookieOptions = {
+            ...options,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax' as const,
+          };
           request.cookies.set({
             name,
             value,
-            ...options,
+            ...cookieOptions,
           });
           response.cookies.set({
             name,
             value,
-            ...options,
+            ...cookieOptions,
           });
         },
         remove(name: string, options: CookieOptions) {
+          const cookieOptions = {
+            ...options,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax' as const,
+          };
           request.cookies.set({
             name,
             value: "",
-            ...options,
+            ...cookieOptions,
           });
           response.cookies.set({
             name,
             value: "",
-            ...options,
+            ...cookieOptions,
           });
         },
       },
@@ -74,6 +84,7 @@ export async function proxy(request: NextRequest) {
     const isPublic = request.nextUrl.pathname === "/staff" || request.nextUrl.pathname === "/staff/reset-password";
     
     if (!user && !isPublic) {
+      console.log("Middleware - No user found, redirecting to login");
       return syncCookies(response, NextResponse.redirect(new URL("/staff", request.url)));
     }
 

@@ -12,7 +12,13 @@ export const createClient = () => {
 
   return createBrowserClient(
     supabaseUrl || "",
-    supabaseKey || ""
+    supabaseKey || "",
+    {
+      cookieOptions: {
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+      }
+    }
   );
 };
 

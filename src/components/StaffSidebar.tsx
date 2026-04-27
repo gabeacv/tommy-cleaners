@@ -60,37 +60,77 @@ export default function StaffSidebar({ role }: { role: string }) {
     { label: "My Profile", icon: User, href: "/staff/employee/profile" },
   ];
 
-  return (
-    <aside className="w-64 bg-white border-r border-charcoal/5 flex flex-col p-8 gap-12 shrink-0">
-      <h1 className="text-2xl font-cursive text-charcoal">Tommy Cleaners Staff</h1>
-      
-      <nav className="flex flex-col gap-4">
-        {menuItems.map((item) => (
-          <Link 
-            key={item.href}
-            href={item.href}
-            className={`flex items-center justify-between px-6 py-4 rounded-2xl transition-all duration-300 font-medium ${pathname === item.href ? 'bg-primary text-charcoal shadow-md' : 'text-charcoal/40 hover:bg-cloud hover:text-charcoal'}`}
-          >
-            <div className="flex items-center gap-4">
-              <item.icon size={20} />
-              <span>{item.label}</span>
-            </div>
-            {item.badge !== undefined && item.badge !== null && (
-              <span className="bg-red-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full">
-                {item.badge}
-              </span>
-            )}
-          </Link>
-        ))}
-      </nav>
+  // Note: add pb-20 md:pb-0 to the <main> element in staff/(portal)/layout.tsx
+  // to prevent content being hidden behind the bottom nav on mobile
 
-      <button 
-        onClick={handleLogout}
-        className="mt-auto flex items-center gap-4 px-6 py-4 text-charcoal/40 hover:text-red-400 transition-colors font-medium border-t border-charcoal/5 pt-8"
-      >
-        <LogOut size={20} />
-        <span>Log Out</span>
-      </button>
-    </aside>
+  return (
+    <>
+      {/* Desktop Sidebar */}
+      <aside className="hidden md:flex flex-col w-64 bg-white border-r border-charcoal/5 p-8 gap-12 shrink-0">
+        <h1 className="text-2xl font-cursive text-charcoal">Tommy Cleaners Staff</h1>
+        
+        <nav className="flex flex-col gap-4">
+          {menuItems.map((item) => (
+            <Link 
+              key={item.href}
+              href={item.href}
+              className={`flex items-center justify-between px-6 py-4 rounded-2xl transition-all duration-300 font-medium ${pathname === item.href ? 'bg-primary text-charcoal shadow-md' : 'text-charcoal/40 hover:bg-cloud hover:text-charcoal'}`}
+            >
+              <div className="flex items-center gap-4">
+                <item.icon size={20} />
+                <span>{item.label}</span>
+              </div>
+              {item.badge !== undefined && item.badge !== null && (
+                <span className="bg-red-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full">
+                  {item.badge}
+                </span>
+              )}
+            </Link>
+          ))}
+        </nav>
+
+        <button 
+          onClick={handleLogout}
+          className="mt-auto flex items-center gap-4 px-6 py-4 text-charcoal/40 hover:text-red-400 transition-colors font-medium border-t border-charcoal/5 pt-8"
+        >
+          <LogOut size={20} />
+          <span>Log Out</span>
+        </button>
+      </aside>
+
+      {/* Mobile Bottom Navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-charcoal/5 flex md:hidden items-center justify-around px-4 py-3 safe-area-bottom">
+        {menuItems.map((item) => {
+          const isActive = pathname === item.href;
+          return (
+            <Link 
+              key={item.href}
+              href={item.href}
+              className={`flex flex-col items-center gap-1 transition-colors ${isActive ? 'text-charcoal' : 'text-charcoal/30'}`}
+            >
+              <div className={`relative ${isActive ? 'bg-primary/20 rounded-xl p-2' : 'p-2'}`}>
+                <item.icon size={22} />
+                {item.badge !== undefined && item.badge !== null && (
+                  <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500" />
+                )}
+              </div>
+              <span className="text-[10px] uppercase tracking-widest font-medium">
+                {item.label}
+              </span>
+            </Link>
+          );
+        })}
+        <button 
+          onClick={handleLogout}
+          className="flex flex-col items-center gap-1 text-charcoal/30"
+        >
+          <div className="p-2">
+            <LogOut size={22} />
+          </div>
+          <span className="text-[10px] uppercase tracking-widest font-medium">Exit</span>
+        </button>
+      </nav>
+    </>
   );
 }
+

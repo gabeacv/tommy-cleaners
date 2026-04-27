@@ -1,14 +1,37 @@
 "use client";
 
-import { Plus, Phone, MapPin, Mail, Clock } from "lucide-react";
+import { Plus, Phone, MapPin, Mail, Clock, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
-const mockEmployees = [
-    { id: 1, full_name: 'Tommy Nelson', role: 'admin', email: 'tommy@tommycleaners.com', phone: '+1 (555) 902-1234', address: 'Upper West Side, NY', constraintsCount: 2 },
-    { id: 2, full_name: 'Sarah Jenkins', role: 'employee', email: 'sarah@tommycleaners.com', phone: '+1 (555) 123-4567', address: 'Brooklyn Heights, NY', constraintsCount: 1 },
-];
+interface Employee {
+  id: string;
+  full_name: string;
+  email: string;
+  phone: string;
+  address: string;
+  role: string;
+}
 
 export default function AdminEmployees() {
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/staff/data?type=employees")
+      .then(r => r.json())
+      .then(data => {
+        if (Array.isArray(data)) setEmployees(data);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return (
+    <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="animate-spin text-primary" size={48} />
+    </div>
+  );
+
   return (
     <div className="flex flex-col gap-12">
       <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
@@ -25,10 +48,10 @@ export default function AdminEmployees() {
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {mockEmployees.map((empl) => (
+          {employees.map((empl) => (
               <div key={empl.id} className="bg-white p-12 rounded-3xl shadow-xl border border-charcoal/5 group hover:shadow-2xl transition-all duration-500">
                   <div className="flex justify-between items-start mb-12">
-                       <div className="w-24 h-24 rounded-full bg-primary/20 flex items-center justify-center text-primary font-cursive text-4xl group-hover:bg-primary group-hover:text-charcoal transition-colors duration-500">{empl.full_name[0]}</div>
+                       <div className="w-24 h-24 rounded-full bg-primary/20 flex items-center justify-center text-primary font-cursive text-4xl group-hover:bg-primary group-hover:text-charcoal transition-colors duration-500">{empl.full_name?.[0] ?? '?'}</div>
                        <span className="px-6 py-2 rounded-full text-[10px] uppercase font-bold tracking-[0.2em] bg-charcoal text-white">{empl.role}</span>
                   </div>
 
@@ -46,11 +69,7 @@ export default function AdminEmployees() {
                       </p>
                   </div>
 
-                  <div className="flex items-center justify-between border-t border-charcoal/5 pt-8">
-                       <div className="flex items-center gap-3 text-charcoal/40 text-xs tracking-widest uppercase">
-                          <Clock size={16} />
-                          <span>{empl.constraintsCount} Availability Constraints</span>
-                       </div>
+                  <div className="flex items-center justify-end border-t border-charcoal/5 pt-8">
                        <button className="text-xs tracking-[0.2em] font-bold uppercase text-primary hover:text-charcoal transition-colors">Manage →</button>
                   </div>
               </div>

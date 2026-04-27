@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
-import { Dancing_Script, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const dancingScript = Dancing_Script({
-  subsets: ["latin"],
-  variable: "--font-cursive",
-  weight: ["400", "700"],
-});
 
 const inter = Inter({
   subsets: ["latin"],
@@ -26,7 +21,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${dancingScript.variable} h-full antialiased`}
+      className={`${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

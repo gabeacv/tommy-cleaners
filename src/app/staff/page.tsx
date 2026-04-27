@@ -38,11 +38,9 @@ export default function StaffLogin() {
       .maybeSingle();
 
     if (profile?.role === "admin") {
-      router.push("/staff/admin/calendar");
+      window.location.href = "/staff/admin/calendar";
     } else {
-      // If no profile exists yet, they'll default to employee view or 
-      // be caught by middleware next time
-      router.push("/staff/employee/calendar");
+      window.location.href = "/staff/employee/calendar";
     }
   };
 

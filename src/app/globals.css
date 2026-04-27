@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --font-cursive: "Dancing Script", cursive;
+  --font-cursive: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-sans: "Inter", sans-serif;
   
   --color-primary: #5BA3D9;
@@ -95,4 +95,18 @@ html {
     animation: none;
     transform: translateX(20vw); /* Static position to keep them on screen */
   }
+}
+
+/* FullCalendar Overrides */
+.fc {
+  font-family: 'Inter', sans-serif !important;
+  --fc-border-color: rgba(44, 44, 44, 0.05);
+  --fc-today-bg-color: rgba(191, 217, 242, 0.1);
+}
+.fc-col-header-cell-cushion { 
+  color: #2C2C2C !important; 
+  text-transform: uppercase; 
+  font-size: 10px; 
+  font-weight: bold; 
+  padding: 10px !important; 
 }
