@@ -15,9 +15,9 @@ import {
   Loader2, 
   Search,
   Inbox as InboxIcon,
-  Filter
+  Filter,
+  RotateCcw
 } from "lucide-react";
-import StatusBadge from "@/components/ui/StatusBadge";
 import { motion, AnimatePresence } from "framer-motion";
 import { createClient } from "@/lib/supabase";
 
@@ -84,6 +84,27 @@ export default function EnquiryInboxClient() {
     };
   }, [supabase]);
 
+  // Auto-scroll when expanding
+  useEffect(() => {
+    if (expandedId) {
+      const element = document.getElementById(`enquiry-${expandedId}`);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+  }, [expandedId]);
+
+  // Click away to close
+  useEffect(() => {
+    const handleClickAway = (e: MouseEvent) => {
+      if (expandedId && !(e.target as HTMLElement).closest('.enquiry-item')) {
+        setExpandedId(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickAway);
+    return () => document.removeEventListener('mousedown', handleClickAway);
+  }, [expandedId]);
+
   const updateStatus = async (id: string, newStatus: EnquiryStatus) => {
     // Optimistic update
     const previousEnquiries = [...enquiries];
@@ -149,37 +170,40 @@ export default function EnquiryInboxClient() {
   }
 
   return (
-    <div className="flex flex-col gap-8">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-        <div>
-          <h2 className="text-4xl font-cursive text-charcoal mb-2">Inbox</h2>
-          <p className="text-charcoal/50">Manage your incoming cleaning requests and enquiries.</p>
-        </div>
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <h2 className="text-3xl font-cursive text-charcoal">Inbox</h2>
         
-        <div className="relative w-full md:w-80">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-charcoal/30" size={18} />
+        <div className="relative w-full md:w-64">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-charcoal/30" size={14} />
           <input 
             type="text" 
             placeholder="Search enquiries..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-white border border-charcoal/5 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
+            className="w-full pl-9 pr-4 py-2 bg-white border border-charcoal/5 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm shadow-sm"
           />
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 p-1.5 bg-cloud/50 rounded-2xl border border-charcoal/5 self-start">
+      <div className="grid grid-cols-3 w-full p-1 bg-cloud/50 rounded-xl border border-charcoal/5">
         {TABS.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center gap-2 px-6 py-2.5 rounded-xl transition-all font-medium text-sm ${activeTab === tab.id ? 'bg-white text-charcoal shadow-sm' : 'text-charcoal/40 hover:text-charcoal/60'}`}
+            className={`flex items-center justify-center gap-1.5 py-2 rounded-lg transition-all font-medium text-xs min-w-0 ${
+              activeTab === tab.id
+                ? 'bg-white text-charcoal shadow-sm'
+                : 'text-charcoal/40 hover:text-charcoal/60'
+            }`}
           >
-            <tab.icon size={16} />
-            {tab.label}
+            <tab.icon size={12} className="shrink-0" />
+            <span className="truncate">{tab.label}</span>
             {counts[tab.id] > 0 && (
-              <span className={`ml-1 px-2 py-0.5 rounded-full text-[10px] ${activeTab === tab.id ? 'bg-primary/20 text-charcoal' : 'bg-charcoal/5 text-charcoal/40'}`}>
+              <span className={`shrink-0 px-1.5 py-0.5 rounded-full text-[10px] ${
+                activeTab === tab.id ? 'bg-primary/20 text-charcoal' : 'bg-charcoal/5 text-charcoal/40'
+              }`}>
                 {counts[tab.id]}
               </span>
             )}
@@ -191,7 +215,11 @@ export default function EnquiryInboxClient() {
 
         <div className="divide-y divide-charcoal/5">
           {filteredEnquiries.map((enquiry) => (
-            <div key={enquiry.id} className="flex flex-col transition-all">
+            <div 
+              key={enquiry.id} 
+              id={`enquiry-${enquiry.id}`}
+              className="enquiry-item flex flex-col transition-all"
+            >
               <AnimatePresence>
                 {expandedId === enquiry.id && (
                   <motion.div 
@@ -200,68 +228,70 @@ export default function EnquiryInboxClient() {
                     exit={{ height: 0, opacity: 0 }}
                     className="overflow-hidden bg-cloud/10"
                   >
-                    <div className="px-6 py-4 grid grid-cols-1 md:grid-cols-3 gap-6 border-t border-charcoal/5">
-                      <div className="md:col-span-2 flex flex-col gap-8">
-                        <div>
-                          <label className="text-xs uppercase tracking-widest font-semibold text-charcoal/30 mb-2 block">Message</label>
-                          <div className="bg-white p-6 rounded-2xl border border-charcoal/5 text-charcoal leading-relaxed whitespace-pre-wrap italic shadow-sm">
-                            &quot;{enquiry.message}&quot;
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                           <div className="flex items-center gap-2 text-sm text-charcoal/60">
-                             <Mail size={14} className="text-primary" />
-                             <a href={`mailto:${enquiry.email}`} className="hover:text-primary transition-colors font-medium">{enquiry.email}</a>
-                           </div>
-                           <div className="flex items-center gap-2 text-sm text-charcoal/60">
-                             <Phone size={14} className="text-primary" />
-                             <a href={`tel:${enquiry.phone}`} className="hover:text-primary transition-colors font-medium">{enquiry.phone}</a>
-                           </div>
-                           <div className="flex items-center gap-2 text-sm text-charcoal/60">
-                             <MapPin size={14} className="text-primary" />
-                             <span className="font-medium">{enquiry.area}</span>
-                           </div>
-                           <div className="flex items-center gap-2 text-sm text-charcoal/60">
-                             <Building size={14} className="text-primary" />
-                             <span className="font-medium">{enquiry.property_type}</span>
-                           </div>
-                        </div>
+                    <div 
+                      onClick={() => setExpandedId(null)}
+                      className="px-8 pb-10 pt-4 border-t border-charcoal/5 cursor-pointer"
+                    >
+                      {/* Message */}
+                      <div 
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-sm text-charcoal/80 leading-relaxed italic border-l-2 border-primary/20 pl-4 py-1 mb-6 cursor-text"
+                      >
+                        "{enquiry.message}"
                       </div>
 
-                      <div className="flex flex-col gap-4">
-                        <label className="text-xs uppercase tracking-widest font-semibold text-charcoal/30 mb-2 block">Status Actions</label>
-                        <div className="flex flex-col gap-2">
-                          {enquiry.status !== 'reviewed' && (
-                            <button 
-                              onClick={() => updateStatus(enquiry.id, 'reviewed')}
-                              className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-neutral-800 text-white hover:bg-black transition-all shadow-md group"
-                            >
-                              <Check size={18} className="group-hover:scale-110 transition-transform" />
-                              <span className="font-semibold text-sm">Mark as Reviewed</span>
-                            </button>
-                          )}
-                          
-                          {enquiry.status !== 'archived' && (
-                            <button 
-                              onClick={() => updateStatus(enquiry.id, 'archived')}
-                              className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-white text-charcoal/60 border border-charcoal/10 hover:border-red-400 hover:text-red-600 transition-all shadow-sm group"
-                            >
-                              <Archive size={18} className="group-hover:scale-110 transition-transform" />
-                              <span className="font-semibold text-sm">Archive Enquiry</span>
-                            </button>
-                          )}
-
-                          {(enquiry.status === 'reviewed' || enquiry.status === 'archived') && (
-                            <button 
-                              onClick={() => updateStatus(enquiry.id, 'new')}
-                              className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-white text-primary border border-primary/20 hover:bg-primary/5 transition-all shadow-sm group mt-2"
-                            >
-                               <Clock size={18} className="group-hover:scale-110 transition-transform" />
-                               <span className="font-semibold text-sm">Reset to New</span>
-                            </button>
-                          )}
+                      {/* Contact row */}
+                      <div 
+                        onClick={(e) => e.stopPropagation()}
+                        className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-6 text-xs text-charcoal/60 cursor-default"
+                      >
+                        <div className="flex items-center gap-1.5">
+                          <Mail size={12} className="text-primary/50" />
+                          <span className="font-medium text-charcoal/80 selection:bg-primary/10">{enquiry.email}</span>
                         </div>
+                        <div className="flex items-center gap-1.5">
+                          <Phone size={12} className="text-primary/50" />
+                          <span className="font-medium text-charcoal/80 selection:bg-primary/10">{enquiry.phone}</span>
+                        </div>
+                        <div className="px-2 py-0.5 rounded bg-charcoal/5 uppercase tracking-wider font-semibold text-[10px]">{enquiry.area}</div>
+                        <div className="px-2 py-0.5 rounded bg-charcoal/5 uppercase tracking-wider font-semibold text-[10px]">{enquiry.property_type}</div>
+                      </div>
+
+                      {/* Action row */}
+                      <div 
+                        onClick={(e) => e.stopPropagation()}
+                        className="flex items-center gap-2 pt-4 border-t border-charcoal/5"
+                      >
+                        {enquiry.status !== 'reviewed' && (
+                          <button 
+                            onClick={() => updateStatus(enquiry.id, 'reviewed')}
+                            title="Mark as Reviewed"
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-800 text-white text-xs font-medium hover:bg-black transition-colors"
+                          >
+                            <Check size={14} />
+                            <span>Reviewed</span>
+                          </button>
+                        )}
+                        {enquiry.status !== 'archived' && (
+                          <button 
+                            onClick={() => updateStatus(enquiry.id, 'archived')}
+                            title="Archive"
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-charcoal/10 text-charcoal/50 text-xs font-medium hover:border-red-300 hover:text-red-500 transition-colors"
+                          >
+                            <Archive size={14} />
+                            <span>Archive</span>
+                          </button>
+                        )}
+                        {(enquiry.status === 'reviewed' || enquiry.status === 'archived') && (
+                          <button 
+                            onClick={() => updateStatus(enquiry.id, 'new')}
+                            title="Reset to New"
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-primary/20 text-primary text-xs font-medium hover:bg-primary/5 transition-colors"
+                          >
+                            <RotateCcw size={14} />
+                            <span>Reset</span>
+                          </button>
+                        )}
                       </div>
                     </div>
                   </motion.div>
@@ -270,21 +300,21 @@ export default function EnquiryInboxClient() {
 
               <button 
                 onClick={() => setExpandedId(expandedId === enquiry.id ? null : enquiry.id)}
-                className="flex flex-wrap items-center gap-x-4 gap-y-1 px-6 py-4 w-full text-left hover:bg-cloud/30 transition-colors"
+                className="flex flex-wrap items-center gap-x-4 gap-y-1 px-6 py-3 w-full text-left hover:bg-cloud/30 transition-colors"
               >
-                <div className="font-medium text-ocean min-w-[140px]">
+                <div className={`flex items-center gap-2 min-w-[160px] ${enquiry.status === 'new' ? 'font-bold text-ocean' : 'font-medium text-charcoal/70'}`}>
+                  {enquiry.status === 'new' && <div className="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(var(--primary-rgb),0.5)]" />}
                   {enquiry.first_name} {enquiry.last_name}
                 </div>
-                <div className="flex items-center gap-2 text-sm text-slate-500">
+                <div className="flex items-center gap-2 text-xs text-charcoal/40">
                   <span>{enquiry.property_type}</span>
-                  <span>·</span>
+                  <span className="opacity-30">·</span>
                   <span>{enquiry.area}</span>
-                  <span>·</span>
-                  <span>{format(new Date(enquiry.created_at), 'MMM d, yyyy')}</span>
+                  <span className="opacity-30">·</span>
+                  <span>{format(new Date(enquiry.created_at), 'MMM d')}</span>
                 </div>
                 <div className="ml-auto flex items-center gap-4">
-                  <StatusBadge status={enquiry.status} />
-                  {expandedId === enquiry.id ? <ChevronUp size={16} className="text-charcoal/20" /> : <ChevronDown size={16} className="text-charcoal/20" />}
+                  {expandedId === enquiry.id ? <ChevronUp size={14} className="text-charcoal/20" /> : <ChevronDown size={14} className="text-charcoal/20" />}
                 </div>
               </button>
             </div>
