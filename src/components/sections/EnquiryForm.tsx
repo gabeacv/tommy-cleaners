@@ -49,7 +49,7 @@ export default function EnquiryForm() {
 
       setIsSubmitted(true);
       reset();
-    } catch (err) {
+    } catch {
       setError("Something went wrong. Please try again later.");
     } finally {
       setIsSubmitting(false);
@@ -62,7 +62,7 @@ export default function EnquiryForm() {
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
           <h2 className="text-5xl md:text-7xl mb-8 font-cursive text-primary">Thank you.</h2>
           <p className="text-xl md:text-2xl text-charcoal/70 leading-relaxed mb-12">
-            We've received your enquiry and Tommy will reach out personally within 24 hours to schedule a walkthrough.
+            We&apos;ve received your enquiry and Tommy will reach out personally within 24 hours to schedule a walkthrough.
           </p>
           <button 
             onClick={() => setIsSubmitted(false)}
@@ -78,7 +78,7 @@ export default function EnquiryForm() {
   return (
     <section id="enquiry" className="py-24 md:py-32 px-4 max-w-4xl mx-auto">
       <div className="flex flex-col items-center text-center mb-16 md:mb-24">
-        <h2 className="text-5xl md:text-7xl text-charcoal italic font-cursive mb-6">Let's talk.</h2>
+        <h2 className="text-5xl md:text-7xl text-charcoal italic font-cursive mb-6">Let&apos;s talk.</h2>
         <p className="text-xl text-charcoal/70 max-w-xl">
           Complete the form below to begin the process. We respond to all enquiries within one business day.
         </p>

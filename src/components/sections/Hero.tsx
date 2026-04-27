@@ -1,22 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
 
 export default function Hero() {
   return (
     <section id="hero" className="relative h-screen min-h-[700px] w-full overflow-hidden flex items-center justify-center">
-      {/* Background Image with slight parallax effect placeholder */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="/images/hero_clouds.png"
-          alt="Luxury NYC Sky"
-          fill
-          priority
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px]" />
-      </div>
+      {/* Animated Cloud Background will show through here */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-primary/20 to-transparent" />
 
       <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
         <motion.p 

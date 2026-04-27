@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function StaffLogin() {
   const [email, setEmail] = useState("");
@@ -112,9 +113,9 @@ export default function StaffLogin() {
         </form>
       </div>
 
-      <a href="/" className="mt-12 text-sm text-charcoal/40 hover:text-primary tracking-widest uppercase flex items-center gap-2">
+      <Link href="/" className="mt-12 text-sm text-charcoal/40 hover:text-primary tracking-widest uppercase flex items-center gap-2">
         <span>← Back to Site</span>
-      </a>
+      </Link>
     </div>
   );
 }

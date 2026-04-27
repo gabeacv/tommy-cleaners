@@ -4,7 +4,7 @@
   --font-cursive: "Dancing Script", cursive;
   --font-sans: "Inter", sans-serif;
   
-  --color-primary: #BFD9F2;
+  --color-primary: #5BA3D9;
   --color-charcoal: #2C2C2C;
   --color-cloud: #F4F8FC;
   --color-white: #FFFFFF;
@@ -40,4 +40,59 @@ html {
 .cloud-dissolve {
   mask-image: linear-gradient(to bottom, transparent, black 25%, black 75%, transparent);
   -webkit-mask-image: linear-gradient(to bottom, transparent, black 25%, black 75%, transparent);
+}
+
+@keyframes cloud-drift {
+  from {
+    transform: translateX(-150%);
+  }
+  to {
+    transform: translateX(110vw);
+  }
+}
+
+@keyframes cloud-bob {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-cloud-far {
+  animation: cloud-drift 120s linear infinite;
+}
+
+.animate-cloud-mid {
+  animation: cloud-drift 80s linear infinite;
+}
+
+.animate-cloud-near {
+  animation: cloud-drift 75s linear infinite;
+}
+
+.animate-cloud-bob {
+  animation: cloud-bob 8s ease-in-out infinite;
+}
+
+.cloud-blur-sm {
+  filter: blur(2px);
+}
+
+.cloud-blur-md {
+  filter: blur(4px);
+}
+
+.cloud-blur-lg {
+  filter: blur(8px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-cloud-far,
+  .animate-cloud-mid,
+  .animate-cloud-near {
+    animation: none;
+    transform: translateX(20vw); /* Static position to keep them on screen */
+  }
 }

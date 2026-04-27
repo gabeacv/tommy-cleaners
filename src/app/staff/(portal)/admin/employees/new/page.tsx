@@ -23,7 +23,7 @@ export default function NewEmployeePage() {
   const [serverError, setServerError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<FormData>({
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(NewEmployeeSchema),
     defaultValues: {
       role: 'employee'
@@ -49,8 +49,8 @@ export default function NewEmployeePage() {
       setTimeout(() => {
         router.push("/staff/admin/employees");
       }, 2000);
-    } catch (err: any) {
-      setServerError(err.message);
+    } catch (err: unknown) {
+      setServerError(err instanceof Error ? err.message : "An unexpected error occurred");
     }
   };
 

@@ -8,7 +8,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { Plus } from "lucide-react";
 
 export default function AdminCalendar() {
-  const [events, setEvents] = useState([
+  const [events] = useState([
     { title: 'Emma Watson', start: '2026-04-12T10:00:00', end: '2026-04-12T14:00:00' },
     { title: 'John Doe', start: '2026-04-13T09:00:00', end: '2026-04-13T13:00:00' },
   ]);

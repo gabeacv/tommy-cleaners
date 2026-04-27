@@ -30,7 +30,7 @@ export default function About() {
             I founded Tommy Cleaners with a simple belief: your home should be a sanctuary, not a chore list. After seeing how jarring it can be to have strangers in your space, I wanted to build a service that prioritizes relationship and trust over everything else. 
           </p>
           <p>
-            We don't just send "a cleaner." We send a dedicated professional who learns your preferences, knows your space, and respects your privacy. By focusing on a small group of premium residential and corporate clients in NYC, we ensure that every visit feels consistent, thoughtful, and transformative. It's not just about removing dust; it's about restoring your peace of mind.
+            We don&apos;t just send &quot;a cleaner.&quot; We send a dedicated professional who learns your preferences, knows your space, and respects your privacy. By focusing on a small group of premium residential and corporate clients in NYC, we ensure that every visit feels consistent, thoughtful, and transformative. It&apos;s not just about removing dust; it&apos;s about restoring your peace of mind.
           </p>
         </div>
 

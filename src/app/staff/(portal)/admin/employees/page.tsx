@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, User, Phone, MapPin, Mail, Clock } from "lucide-react";
+import { Plus, Phone, MapPin, Mail, Clock } from "lucide-react";
 import Link from "next/link";
 
 const mockEmployees = [

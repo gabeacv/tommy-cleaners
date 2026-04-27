@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, Trash, User, Phone, MapPin, Mail, Clock } from "lucide-react";
+import { Plus, Trash, User, Clock } from "lucide-react";
 import { useState } from "react";
 
 const mockConstraints = [
@@ -9,14 +9,14 @@ const mockConstraints = [
 ];
 
 export default function EmployeeProfile() {
-  const [info, setInfo] = useState({
+  const [info] = useState({
     name: 'Sarah Jenkins',
     email: 'sarah@tommycleaners.com',
     phone: '+1 (555) 123-4567',
     address: 'Brooklyn Heights, NY',
     role: 'employee',
   });
-  const [constraints, setConstraints] = useState(mockConstraints);
+  const [constraints] = useState(mockConstraints);
 
   return (
     <div className="flex flex-col gap-16 pb-24">

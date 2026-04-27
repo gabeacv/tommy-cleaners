@@ -8,7 +8,7 @@ import HowItWorks from "@/components/sections/HowItWorks";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 w-full bg-white select-none selection:bg-primary/30 selection:text-charcoal cursor-default overflow-x-hidden">
+    <div className="flex flex-col flex-1 w-full select-none selection:bg-primary/30 selection:text-charcoal cursor-default overflow-x-hidden">
       <main className="flex flex-1 flex-col w-full scroll-smooth">
         <Hero />
         <About />

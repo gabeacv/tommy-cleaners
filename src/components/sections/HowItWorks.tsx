@@ -27,7 +27,7 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section id="how" className="bg-cloud py-24 md:py-32 px-4 shadow-inner">
+    <section id="how" className="bg-transparent py-24 md:py-32 px-4">
       <div className="max-w-7xl mx-auto flex flex-col items-center">
         <h2 className="text-5xl md:text-7xl text-charcoal mb-16 md:mb-24 text-center">Seamlessly scheduled.</h2>
         

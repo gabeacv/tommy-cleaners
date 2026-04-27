@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-start gap-16 md:gap-32">
         <div className="flex flex-col items-center md:items-start text-center md:text-left">
           <h2 className="text-4xl md:text-5xl font-cursive text-primary mb-6">Tommy Cleaners</h2>
-          <p className="text-white/60 text-lg max-w-sm">Premium NYC personal cleaning for your home and sanctuary. NYC's trusted cleaners since 2018.</p>
+          <p className="text-white/60 text-lg max-w-sm">Premium NYC personal cleaning for your home and sanctuary. NYC&apos;s trusted cleaners since 2018.</p>
         </div>
 
         <div className="flex flex-col items-center md:items-start gap-8">
@@ -17,7 +17,7 @@ export default function Footer() {
 
         <div className="flex flex-col items-center md:items-end gap-12 mt-auto">
              <div className="flex flex-col items-center md:items-end gap-4">
-                <p className="text-white/40 text-sm italic">"Trust the process. Love the clean."</p>
+                <p className="text-white/40 text-sm italic">&quot;Trust the process. Love the clean.&quot;</p>
              </div>
              <Link 
                 href="/staff" 

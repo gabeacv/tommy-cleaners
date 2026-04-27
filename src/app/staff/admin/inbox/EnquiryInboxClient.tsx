@@ -37,7 +37,7 @@ export default function EnquiryInboxClient() {
       if (!res.ok) throw new Error('Failed to fetch enquiries');
       const data = await res.json();
       setEnquiries(data);
-    } catch (err) {
+    } catch {
       setError('Could not load enquiries. Please try again.');
     } finally {
       setLoading(false);
@@ -57,7 +57,7 @@ export default function EnquiryInboxClient() {
       });
 
       if (!res.ok) throw new Error('Update failed');
-    } catch (err) {
+    } catch {
       // Revert on error
       setEnquiries(previousEnquiries);
       alert('Failed to update status. Please try again.');
@@ -138,7 +138,7 @@ export default function EnquiryInboxClient() {
                         <div>
                           <label className="text-xs uppercase tracking-widest font-semibold text-charcoal/30 mb-2 block">Message</label>
                           <div className="bg-white p-6 rounded-2xl border border-charcoal/5 text-charcoal leading-relaxed whitespace-pre-wrap italic">
-                            "{enquiry.message}"
+                            &quot;{enquiry.message}&quot;
                           </div>
                         </div>
 

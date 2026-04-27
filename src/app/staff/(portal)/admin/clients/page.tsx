@@ -3,8 +3,19 @@
 import { Plus, Search, Filter, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 
+interface Client {
+  id: string;
+  first_name: string;
+  last_name: string;
+  status: 'active' | 'inactive';
+  frequency: string;
+  cleaner: string;
+  address: string;
+  email: string;
+}
+
 export default function AdminClients() {
-  const [clients, setClients] = useState<any[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

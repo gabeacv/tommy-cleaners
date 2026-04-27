@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     }
 
     // 2. Send Email via Resend
-    if (process.env.RESEND_API_KEY) {
+    if (resend) {
         try {
             await resend.emails.send({
                 from: "Tommy Cleaners <onboarding@resend.dev>",
